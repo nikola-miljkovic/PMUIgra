@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/polygon_set_start"
+        android:id="@+id/polygon_set_start"/>
+    <item android:title="@string/polygon_set_end"
+        android:id="@+id/polygon_set_end"/>
+    <item android:title="@string/polygon_set_hole"
+        android:id="@+id/polygon_set_hole"/>
+    <item android:title="@string/polygon_create_rectangle"
+        android:id="@+id/polygon_create_rectangle"/>
+    <item android:title="@string/polygon_save"
+        android:id="@+id/polygon_save"/>
+    <item android:title="@string/polygon_cancel"
+        android:id="@+id/polygon_cancel"/>
+</menu>

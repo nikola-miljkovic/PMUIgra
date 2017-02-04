@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">PMU Igra</string>
+    <string name="menu_new_polygon">New Polygon</string>
+    <string name="menu_statistics">Statistics</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="polygon_set_start">Set starting point</string>
+    <string name="polygon_set_end">Set ending point</string>
+    <string name="polygon_set_hole">Set hole</string>
+    <string name="polygon_create_rectangle">Create rectangle</string>
+    <string name="polygon_save">Save</string>
+    <string name="polygon_cancel">Cancel</string>
+
+    <string name="toast_new_polygon">New polygon.</string>
+    <string name="toast_edit_polygon">Editing polygon \"%1$s\".</string>
+    <string name="toast_edit_error_polygon">Error opening polygon \"%1$s\".</string>
+
+    <string name="toast_polygon_created">Created polygon with name \"%1$s\".</string>
+    <string name="toast_polygon_creation_error">Error while creating polygon \"%1$s\".</string>
+    <string name="toast_polygon_cancel">Canceled polygon creation.</string>
+
+    <string name="dialog_new_polygon">Give name to new polygon.</string>
+
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+</resources>

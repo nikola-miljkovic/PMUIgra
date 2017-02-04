@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/menu_new_polygon"
+          android:id="@+id/menu_new_polygon"/>
+    <item android:title="@string/menu_statistics"
+          android:id="@+id/menu_statistics"/>
+    <item android:title="@string/menu_settings"
+          android:id="@+id/menu_settings"/>
+</menu>
