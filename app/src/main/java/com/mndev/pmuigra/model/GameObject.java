@@ -1,9 +1,8 @@
 package com.mndev.pmuigra.model;
 
-/**
- * Created by milja on 2/4/2017.
- */
+import android.graphics.Canvas;
 
-public interface Collidable {
+public interface GameObject {
+    void draw(Canvas canvas);
     boolean HasColided(float x, float y, float radius);
 }

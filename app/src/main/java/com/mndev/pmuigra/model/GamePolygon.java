@@ -8,11 +8,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePolygon implements Serializable, IDrawable {
+public class GamePolygon implements Serializable, GameObject {
 
     private static Paint BlackPaint;
 
-    public static Paint getBlackPaint() {
+    static Paint getBlackPaint() {
         return BlackPaint;
     }
 
@@ -22,21 +22,21 @@ public class GamePolygon implements Serializable, IDrawable {
         BlackPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
     }
 
-    private List<IDrawable> components;
+    private List<GameObject> gameObjects;
     private GameHole startHole;
     private GameHole endHole;
-    private boolean isGameMode = false;
+    private transient boolean isGameMode = false;
 
     public GamePolygon() {
-        components = new ArrayList<>();
+        gameObjects = new ArrayList<>();
     }
 
-    public List<IDrawable> getComponents() {
-        return components;
+    public List<GameObject> getGameObjects() {
+        return gameObjects;
     }
 
-    public void setComponents(List<IDrawable> components) {
-        this.components = components;
+    public void setGameObjects(List<GameObject> gameObjects) {
+        this.gameObjects = gameObjects;
     }
 
     public GameHole getStartHole() {
@@ -65,7 +65,7 @@ public class GamePolygon implements Serializable, IDrawable {
 
     @Override
     public void draw(Canvas canvas) {
-        if (startHole != null) {
+        if (startHole != null && !isGameMode) {
             startHole.draw(canvas);
         }
 
@@ -73,8 +73,13 @@ public class GamePolygon implements Serializable, IDrawable {
             endHole.draw(canvas);
         }
 
-        for (IDrawable component : components) {
+        for (GameObject component : gameObjects) {
             component.draw(canvas);
         }
+    }
+
+    @Override
+    public boolean HasColided(float x, float y, float radius) {
+        return false;
     }
 }

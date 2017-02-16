@@ -3,7 +3,7 @@ package com.mndev.pmuigra.model;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public class Ball implements IDrawable {
+public class Ball implements GameObject {
 
     private float x;
     private float y;
@@ -56,5 +56,10 @@ public class Ball implements IDrawable {
     public void draw(Canvas canvas) {
         canvas.drawCircle(x, y, radius, paint);
         canvas.drawCircle(x, y, smallRadius, GamePolygon.getBlackPaint());
+    }
+
+    @Override
+    public boolean HasColided(float x, float y, float radius) {
+        return false;
     }
 }

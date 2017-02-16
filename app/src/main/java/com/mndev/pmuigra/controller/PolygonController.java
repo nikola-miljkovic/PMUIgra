@@ -7,17 +7,15 @@ import android.graphics.Paint;
 
 import com.mndev.pmuigra.model.GameHole;
 import com.mndev.pmuigra.model.GamePolygon;
-import com.mndev.pmuigra.model.IDrawable;
+import com.mndev.pmuigra.model.GameObject;
 import com.mndev.pmuigra.model.LineComponent;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class PolygonController implements IDrawable {
+public class PolygonController implements GameObject {
 
     /* SINGLETON */
     private static PolygonController polygonController;
@@ -47,11 +45,11 @@ public class PolygonController implements IDrawable {
 
     public void createHole(float x, float y) {
         GameHole hole = createGameHole(x, y, getHolePaint());
-        gamePolygon.getComponents().add(hole);
+        gamePolygon.getGameObjects().add(hole);
     }
 
     public void createRectangle(float left, float top, float right, float bottom) {
-        gamePolygon.getComponents().add(new LineComponent(left, right, top, bottom));
+        gamePolygon.getGameObjects().add(new LineComponent(left, right, top, bottom));
     }
 
     public boolean save(String name, Context context) {
@@ -85,7 +83,7 @@ public class PolygonController implements IDrawable {
                 gamePolygon.getEndHole().setPaint(getEndPointPaint());
             }
 
-            for (IDrawable drawable : gamePolygon.getComponents()) {
+            for (GameObject drawable : gamePolygon.getGameObjects()) {
                 if (drawable.getClass() == GameHole.class) {
                     ((GameHole)drawable).setPaint(getHolePaint());
                 }
@@ -118,19 +116,19 @@ public class PolygonController implements IDrawable {
         return 15.0f;
     }
 
-    private Paint getStartPointPaint() {
+    public static Paint getStartPointPaint() {
         Paint paint = new Paint();
         paint.setColor(Color.GREEN);
         return paint;
     }
 
-    private Paint getEndPointPaint() {
+    public static Paint getEndPointPaint() {
         Paint paint = new Paint();
         paint.setColor(Color.YELLOW);
         return paint;
     }
 
-    private Paint getHolePaint() {
+    public static Paint getHolePaint() {
         Paint paint = new Paint();
         paint.setColor(Color.BLUE);
         return paint;
@@ -140,5 +138,10 @@ public class PolygonController implements IDrawable {
     public void draw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
         gamePolygon.draw(canvas);
+    }
+
+    @Override
+    public boolean HasColided(float x, float y, float radius) {
+        return false;
     }
 }

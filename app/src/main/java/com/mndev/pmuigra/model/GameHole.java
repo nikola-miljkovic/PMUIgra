@@ -5,7 +5,7 @@ import android.graphics.Paint;
 
 import java.io.Serializable;
 
-public class GameHole implements IDrawable, Collidable, Serializable {
+public class GameHole implements GameObject, Serializable {
 
     private float x;
     private float y;
@@ -51,6 +51,13 @@ public class GameHole implements IDrawable, Collidable, Serializable {
 
     @Override
     public boolean HasColided(float x, float y, float radius) {
+        float dx = x - this.x;
+        float dy = y - this.y;
+        float distance = (float)Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < radius + this.radius) {
+            return true;
+        }
         return false;
     }
 }

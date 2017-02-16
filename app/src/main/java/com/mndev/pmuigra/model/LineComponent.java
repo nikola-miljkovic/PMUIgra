@@ -1,11 +1,10 @@
 package com.mndev.pmuigra.model;
 
 import android.graphics.Canvas;
-import android.graphics.RectF;
 
 import java.io.Serializable;
 
-public class LineComponent implements IDrawable, Serializable, Collidable {
+public class LineComponent implements GameObject, Serializable {
 
     private float x1;
     private float x2;
@@ -58,6 +57,7 @@ public class LineComponent implements IDrawable, Serializable, Collidable {
 
     @Override
     public boolean HasColided(float x, float y, float radius) {
+        //if (x + radius > x1 && )
         return false;
     }
 

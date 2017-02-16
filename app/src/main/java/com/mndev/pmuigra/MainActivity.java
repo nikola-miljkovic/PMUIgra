@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
         registerForContextMenu(listView);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, polygonNames);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String listItem = (String)listView.getItemAtPosition(position);
+                openPolygonGameActivity(listItem);
+            }
+        });
     }
 
     @Override
@@ -68,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void openEditPolygonActivity(String name) {
         Intent intent = new Intent(this, NewPolygonActivity.class);
+        intent.putExtra("NAME", name);
+        startActivity(intent);
+    }
+
+    private void openPolygonGameActivity(String name) {
+        Intent intent = new Intent(this, PolygonGameActivity.class);
         intent.putExtra("NAME", name);
         startActivity(intent);
     }
