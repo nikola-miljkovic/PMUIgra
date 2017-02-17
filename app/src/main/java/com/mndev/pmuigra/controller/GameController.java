@@ -26,8 +26,8 @@ public class GameController {
     private int height;
 
     private final int MaxFpsSpeed = PreferenceController.getInstance().getRenderSpeed();
-    private final float coefOfFriction = PreferenceController.getInstance().getCoefficientOfFriction();
-    private final float collisionForce = PreferenceController.getInstance().getCollisionForce();
+    private final float CoefOfFriction = PreferenceController.getInstance().getCoefficientOfFriction();
+    private final float CollisionForce = PreferenceController.getInstance().getCollisionForce();
     
     public static GameController getInstance() {
         return ourInstance;
@@ -100,8 +100,10 @@ public class GameController {
 
         @Override
         public void run() {
+            super.run();
+
             Canvas canvas;
-            long deltaTime = System.currentTimeMillis();
+            long deltaTime = MaxFpsSpeed;
             long currentTime;
 
             while(true) {
