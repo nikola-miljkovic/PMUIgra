@@ -2,7 +2,6 @@ package com.mndev.pmuigra;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -47,24 +46,22 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
     private class SensorEventHandler implements SensorEventListener {
 
         final float alpha = 0.8f;
-        float[] gravity = { 0.0f, 0.0f, 0.0f };
-        float[] linear_acceleration = { 0.0f, 0.0f, 0.0f };
+        float[] accelerationValues = { 0.0f, 0.0f };
+        //float direction =
 
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            for (int i = 0; i < 3; i++) {
-                gravity[i] = alpha * gravity[0] + (1 - alpha) * sensorEvent.values[i];
-                linear_acceleration[i] = sensorEvent.values[i] - gravity[i];
+            for (int i = 0; i < 2; i++) {
+                accelerationValues[i] = alpha * accelerationValues[i] + (1 - alpha) * sensorEvent.values[i] ; //- gravity[i];
             }
 
-            Log.d("ACCELERATION", " X: " + String.valueOf(linear_acceleration[0])
-                    + " Y: " + String.valueOf(linear_acceleration[1])
-                    + " Z: " + String.valueOf(linear_acceleration[2]));
+            Log.d("ACCELERATION", " X: " + String.valueOf(accelerationValues[0])
+                    + " Y: " + String.valueOf(accelerationValues[1]));
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    gameController.setMovementValues(linear_acceleration[0], linear_acceleration[1], linear_acceleration[2]);
+                    gameController.setMovementValues(accelerationValues[0], accelerationValues[1]);
                 }
             });
         }

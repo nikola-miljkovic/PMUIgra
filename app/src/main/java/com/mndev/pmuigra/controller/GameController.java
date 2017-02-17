@@ -10,6 +10,8 @@ import com.mndev.pmuigra.model.Ball;
 import com.mndev.pmuigra.model.GameHole;
 import com.mndev.pmuigra.model.GameObject;
 import com.mndev.pmuigra.model.GamePolygon;
+import com.mndev.pmuigra.model.Hud;
+import com.mndev.pmuigra.model.LineComponent;
 import com.mndev.pmuigra.util.VelocityVec;
 
 import java.io.FileInputStream;
@@ -20,6 +22,7 @@ public class GameController {
 
     private GameRenderThread gameRenderThread;
     private GamePolygon gamePolygon;
+    private Hud hud;
 
     private Ball gameBall;
 
@@ -32,12 +35,16 @@ public class GameController {
     private final int MaxFpsSpeed = PreferenceController.getInstance().getRenderSpeed();
     private final float CoefOfFriction = PreferenceController.getInstance().getCoefficientOfFriction();
     private final float CollisionForce = PreferenceController.getInstance().getCollisionForce();
+    private final float GameSpeed = PreferenceController.getInstance().getGameSpeed();
+    private final float BoostX = PreferenceController.getInstance().getBoostX();
+    private final float BoostY = PreferenceController.getInstance().getBoostY();
     
     public static GameController getInstance() {
         return ourInstance;
     }
 
     private GameController() {
+        hud = new Hud();
     }
 
     public boolean load(String name, Context context) {
@@ -87,9 +94,9 @@ public class GameController {
         this.height = h;
     }
 
-    public void setMovementValues(float x, float y, float z) {
-        ballVect.updateX(x * 0.6f);
-        ballVect.updateY(y * 0.1f);
+    public void setMovementValues(float x, float y) {
+        ballVect.updateX(- x * BoostX * GameSpeed);
+        ballVect.updateY(y * BoostY * GameSpeed);
     }
 
     public void start(SurfaceHolder surfaceHolder) {
@@ -113,7 +120,7 @@ public class GameController {
             long deltaTime = MaxFpsSpeed;
             long renderTime = 0;
 
-            while(true) {
+            while(!interrupted()) {
                 if (deltaTime >= MaxFpsSpeed) {
                     renderTime = System.currentTimeMillis();
                     gameController.update(deltaTime);
@@ -130,22 +137,48 @@ public class GameController {
 
     private void update(long deltaTime) {
         // apply friction
+        float speed = deltaTime / 1000.0f;
+        ballVect.updateX(- ballVect.getX() * CoefOfFriction * speed);
+        ballVect.updateY(- ballVect.getY() * CoefOfFriction * speed);
 
-        ballVect.updateX(- ballVect.getX() * CoefOfFriction * deltaTime / 1000);
-        ballVect.updateY(- ballVect.getY() * CoefOfFriction * deltaTime / 1000);
-
-        gameBall.setX(gameBall.getX() + ballVect.getX() * deltaTime / 1000);
-        gameBall.setY(gameBall.getY() + ballVect.getY() * deltaTime / 1000);
+        gameBall.setX(gameBall.getX() + ballVect.getX() * speed);
+        gameBall.setY(gameBall.getY() + ballVect.getY() * speed);
 
         if (gameBall.getX() - gameBall.getRadius() <= 0.0f
                 || gameBall.getX() + gameBall.getRadius() >= width) {
-            ballVect.setX(- ballVect.getX());
+            ballVect.setX(- ballVect.getX() * CollisionForce);
         }
 
         if (gameBall.getY() - gameBall.getRadius() <= 0.0f
                 || gameBall.getY() + gameBall.getRadius() >= height) {
-            ballVect.setY(- ballVect.getY());
+            ballVect.setY(- ballVect.getY() * CollisionForce);
         }
+
+        for (GameObject object : gamePolygon.getGameObjects()) {
+            if (object instanceof LineComponent) {
+                // bounce
+                LineComponent lineComponent = (LineComponent)object;
+                if (gameBall.getX() - gameBall.getRadius() < lineComponent.getX2()
+                        && gameBall.getX() + gameBall.getRadius() > lineComponent.getX1()
+                        && gameBall.getY() > lineComponent.getY1()
+                        && gameBall.getY() < lineComponent.getY2())  {
+                    ballVect.setX(- ballVect.getX() * CollisionForce);
+                }
+
+                if (gameBall.getX() < lineComponent.getX2()
+                        && gameBall.getX() > lineComponent.getX1()
+                        && gameBall.getY() + gameBall.getRadius()  >= lineComponent.getY1()
+                        && gameBall.getY() - gameBall.getRadius()  <= lineComponent.getY2())  {
+                    ballVect.setY(- ballVect.getY() * CollisionForce);
+                }
+            } else if (object.HasColided(gameBall.getX(), gameBall.getY(), gameBall.getRadius())) {
+                // loose
+                gameRenderThread.interrupt();
+            }
+        }
+
+        hud.updateTime(deltaTime);
+        hud.setFps(1000 / deltaTime);
     }
 
     private void draw(Canvas canvas) {
@@ -153,5 +186,6 @@ public class GameController {
 
         gamePolygon.draw(canvas);
         gameBall.draw(canvas);
+        hud.draw(canvas);
     }
 }

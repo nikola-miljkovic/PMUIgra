@@ -57,9 +57,6 @@ public class LineComponent implements GameObject, Serializable {
 
     @Override
     public boolean HasColided(float x, float y, float radius) {
-        //if (x + radius > x1 && )
         return false;
     }
-
-
 }

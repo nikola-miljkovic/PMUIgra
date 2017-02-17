@@ -11,7 +11,7 @@ public class PreferenceController {
     }
 
     public int getRenderSpeed() {
-        return 60;
+        return 1000 / 60;
     }
 
     public float getCoefficientOfFriction() {
@@ -19,6 +19,18 @@ public class PreferenceController {
     }
 
     public float getCollisionForce() {
-        return 0.35f;
+        return 0.85f;
+    }
+
+    public float getGameSpeed() {
+        return 0.60f;
+    }
+
+    public float getBoostX() {
+        return 1.6f;
+    }
+
+    public float getBoostY() {
+        return 1.1f;
     }
 }

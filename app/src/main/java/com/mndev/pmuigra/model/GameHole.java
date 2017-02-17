@@ -55,7 +55,7 @@ public class GameHole implements GameObject, Serializable {
         float dy = y - this.y;
         float distance = (float)Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < radius + this.radius) {
+        if (distance < radius + this.radius / 2) {
             return true;
         }
         return false;
