@@ -10,6 +10,7 @@ import com.mndev.pmuigra.model.Ball;
 import com.mndev.pmuigra.model.GameHole;
 import com.mndev.pmuigra.model.GameObject;
 import com.mndev.pmuigra.model.GamePolygon;
+import com.mndev.pmuigra.util.VelocityVec;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -21,6 +22,9 @@ public class GameController {
     private GamePolygon gamePolygon;
 
     private Ball gameBall;
+
+    // TODO: changme
+    private VelocityVec ballVect = new VelocityVec();
 
     private int width;
     private int height;
@@ -45,12 +49,14 @@ public class GameController {
             if (gamePolygon.getStartHole() != null) {
                 GameHole gameHole = gamePolygon.getStartHole();
 
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                Paint paint = new Paint();
                 paint.setColor(Color.GREEN);
+                paint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
                 gameBall = new Ball();
                 gameBall.setX(gameHole.getX());
                 gameBall.setY(gameHole.getY());
+                gameBall.setRadius(gameHole.getRadius());
                 gameBall.setPaint(paint);
 
                 gamePolygon.setGameMode(true);
@@ -82,6 +88,8 @@ public class GameController {
     }
 
     public void setMovementValues(float x, float y, float z) {
+        ballVect.updateX(x * 0.6f);
+        ballVect.updateY(y * 0.1f);
     }
 
     public void start(SurfaceHolder surfaceHolder) {
@@ -98,18 +106,16 @@ public class GameController {
             this.surfaceHolder = surfaceHolder;
         }
 
-        @Override
         public void run() {
             super.run();
 
             Canvas canvas;
             long deltaTime = MaxFpsSpeed;
-            long currentTime;
+            long renderTime = 0;
 
             while(true) {
-                currentTime = System.currentTimeMillis();
-
                 if (deltaTime >= MaxFpsSpeed) {
+                    renderTime = System.currentTimeMillis();
                     gameController.update(deltaTime);
 
                     canvas = surfaceHolder.lockCanvas();
@@ -117,24 +123,35 @@ public class GameController {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
 
-                deltaTime = (System.currentTimeMillis() - currentTime);
+                deltaTime = (System.currentTimeMillis() - renderTime);
             }
         }
     }
 
     private void update(long deltaTime) {
-        gameBall.setX((gameBall.getX() - 15.0f) / deltaTime);
-        gameBall.setY((gameBall.getY() - 15.0f) / deltaTime);
+        // apply friction
+
+        ballVect.updateX(- ballVect.getX() * CoefOfFriction * deltaTime / 1000);
+        ballVect.updateY(- ballVect.getY() * CoefOfFriction * deltaTime / 1000);
+
+        gameBall.setX(gameBall.getX() + ballVect.getX() * deltaTime / 1000);
+        gameBall.setY(gameBall.getY() + ballVect.getY() * deltaTime / 1000);
 
         if (gameBall.getX() - gameBall.getRadius() <= 0.0f
                 || gameBall.getX() + gameBall.getRadius() >= width) {
-            gameBall.setX(width / 2);
+            ballVect.setX(- ballVect.getX());
+        }
+
+        if (gameBall.getY() - gameBall.getRadius() <= 0.0f
+                || gameBall.getY() + gameBall.getRadius() >= height) {
+            ballVect.setY(- ballVect.getY());
         }
     }
 
     private void draw(Canvas canvas) {
-        gameBall.draw(canvas);
+        canvas.drawColor(Color.WHITE);
 
         gamePolygon.draw(canvas);
+        gameBall.draw(canvas);
     }
 }

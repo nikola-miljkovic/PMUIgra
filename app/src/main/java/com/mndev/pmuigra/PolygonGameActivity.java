@@ -64,7 +64,7 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //gameController.setMovementValues(linear_acceleration[0], linear_acceleration[1], linear_acceleration[2]);
+                    gameController.setMovementValues(linear_acceleration[0], linear_acceleration[1], linear_acceleration[2]);
                 }
             });
         }
