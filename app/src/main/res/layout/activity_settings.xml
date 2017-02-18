@@ -11,7 +11,7 @@
     tools:context="com.mndev.pmuigra.SettingsActivity">
 
     <TextView
-        android:text="TextView"
+        android:text="@string/pref_max_fps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
@@ -34,7 +34,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="TextView"
+        android:text="@string/pref_cof"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/max_fps_edit"
@@ -58,7 +58,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="TextView"
+        android:text="pref_collision_force"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cof_edit"
@@ -82,7 +82,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="TextView"
+        android:text="@string/pref_game_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/collision_force_edit"
@@ -106,7 +106,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="TextView"
+        android:text="@string/pref_boost_x"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/game_speed_edit"
@@ -117,20 +117,8 @@
         android:layout_alignParentEnd="true"
         tools:text="@string/pref_boost_x" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:layout_below="@+id/textView6"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/boost_x_edit"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <TextView
-        android:text="TextView"
+        android:text="@string/pref_boost_y"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/boost_x_edit"
@@ -150,6 +138,40 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/boost_y_edit"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="@string/save_prefs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/save_pref_btn"
+        tools:text="@string/save_prefs" />
+
+    <Button
+        android:text="@string/restore_default_pref"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/restore_pref_btn"
+        android:layout_toLeftOf="@+id/save_pref_btn"
+        android:layout_toStartOf="@+id/save_pref_btn"
+        tools:text="@string/restore_default_pref" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/boost_x_edit"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

@@ -31,4 +31,6 @@
     <string name="pref_boost_y">Boost Y</string>
 
     <string name="preference_file">com.mndev.pmuigra.PREF_FILE</string>
+    <string name="save_prefs">Save Preferences</string>
+    <string name="restore_default_pref">Restore defaults</string>
 </resources>

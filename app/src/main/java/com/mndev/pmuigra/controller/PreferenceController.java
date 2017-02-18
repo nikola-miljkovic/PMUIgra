@@ -19,6 +19,37 @@ public class PreferenceController {
     public void load(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        mMaxFPS = sharedPref.getInt(context.getString(R.string.pref_max_fps), mMaxFPS);
+        mCoefficientOfFriction = sharedPref.getFloat(context.getString(R.string.pref_cof), mCoefficientOfFriction);
+        mCollisionForce = sharedPref.getFloat(context.getString(R.string.pref_collision_force), mCollisionForce);
+        mGameSpeed = sharedPref.getFloat(context.getString(R.string.pref_game_speed), mGameSpeed);
+        mBoostX = sharedPref.getFloat(context.getString(R.string.pref_boost_x), mBoostX);
+        mBoostY = sharedPref.getFloat(context.getString(R.string.pref_boost_y), mBoostY);
+    }
+
+    public void store(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putInt(context.getString(R.string.pref_max_fps), mMaxFPS);
+        editor.putFloat(context.getString(R.string.pref_cof), mCoefficientOfFriction);
+        editor.putFloat(context.getString(R.string.pref_collision_force), mCollisionForce);
+        editor.putFloat(context.getString(R.string.pref_game_speed), mGameSpeed);
+        editor.putFloat(context.getString(R.string.pref_boost_x), mBoostX);
+        editor.putFloat(context.getString(R.string.pref_boost_y), mBoostY);
+
+        editor.apply();
+    }
+
+    public void restoreDefaults(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.clear();
+        editor.apply();
     }
 
     int mMaxFPS = 60;
@@ -30,6 +61,10 @@ public class PreferenceController {
 
     public int getRenderSpeed() {
         return 1000 / mMaxFPS;
+    }
+
+    public int getMaxFPS() {
+        return mMaxFPS;
     }
 
     public void setMaxFPS(int maxFPS) {
