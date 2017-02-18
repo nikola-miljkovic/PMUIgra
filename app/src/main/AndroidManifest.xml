@@ -24,6 +24,7 @@
         <activity
             android:name=".PolygonGameActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

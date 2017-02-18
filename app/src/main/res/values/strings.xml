@@ -23,4 +23,12 @@
 
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="pref_max_fps">Max FPS</string>
+    <string name="pref_cof">Coefficient of Friction</string>
+    <string name="pref_collision_force">Collision Force</string>
+    <string name="pref_game_speed">Game speed</string>
+    <string name="pref_boost_x">Boos X</string>
+    <string name="pref_boost_y">Boost Y</string>
+
+    <string name="preference_file">com.mndev.pmuigra.PREF_FILE</string>
 </resources>

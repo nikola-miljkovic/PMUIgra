@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
