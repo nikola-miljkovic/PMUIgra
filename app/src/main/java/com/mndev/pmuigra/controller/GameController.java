@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.view.SurfaceHolder;
 
+import com.mndev.pmuigra.PolygonGameActivity;
+import com.mndev.pmuigra.R;
 import com.mndev.pmuigra.model.Ball;
 import com.mndev.pmuigra.model.GameHole;
 import com.mndev.pmuigra.model.GameObject;
@@ -18,19 +21,28 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 public class GameController {
+    public abstract class GameStatus {
+        public static final int IN_PROGRESS = 0;
+        public static final int WON = 1;
+        public static final int LOST = 2;
+    }
+
     private static GameController ourInstance = new GameController();
 
     private GameRenderThread gameRenderThread;
     private GamePolygon gamePolygon;
     private Hud hud;
 
+    private MediaPlayer mediaPlayer;
+    private PolygonGameActivity gameActivity;
     private Ball gameBall;
-
-    // TODO: changme
     private VelocityVec ballVect = new VelocityVec();
+    private int gameStatus = GameStatus.IN_PROGRESS;
 
     private int width;
     private int height;
+
+    private long totalGameTime = 0;
 
     private final int MaxFpsSpeed = PreferenceController.getInstance().getRenderSpeed();
     private final float CoefOfFriction = PreferenceController.getInstance().getCoefficientOfFriction();
@@ -40,6 +52,9 @@ public class GameController {
     private final float BoostY = PreferenceController.getInstance().getBoostY();
     
     public static GameController getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new GameController();
+        }
         return ourInstance;
     }
 
@@ -47,8 +62,10 @@ public class GameController {
         hud = new Hud();
     }
 
-    public boolean load(String name, Context context) {
+    public boolean load(String name, PolygonGameActivity gameActivity) {
         try {
+            this.gameActivity = gameActivity;
+            Context context = gameActivity.getApplicationContext();
             FileInputStream fis = context.openFileInput(name);
             ObjectInputStream is = new ObjectInputStream(fis);
             gamePolygon = (GamePolygon) is.readObject();
@@ -104,6 +121,40 @@ public class GameController {
         gameRenderThread.start();
     }
 
+    // TODO: kill game
+    public void finishGame() {
+        gameRenderThread.interrupt();
+
+        if (gameActivity != null) {
+            gameActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (gameStatus != GameStatus.IN_PROGRESS &&
+                                (mediaPlayer == null || !mediaPlayer.isPlaying())) {
+                            if (gameStatus == GameStatus.WON) {
+                                mediaPlayer = MediaPlayer.create(gameActivity.getApplicationContext(), R.raw.win);
+                            } else {
+                                mediaPlayer = MediaPlayer.create(gameActivity.getApplicationContext(), R.raw.loss);
+                            }
+
+                            mediaPlayer.start();
+                        }
+
+                        gameActivity.onGameFinished(gameStatus, Hud.produceTimeString(totalGameTime));
+                    } catch (Exception exc) {
+                        exc.printStackTrace();
+                    }
+                }
+            });
+        }
+        ourInstance = null;
+    }
+
+    public int getGameStatus() {
+        return gameStatus;
+    }
+
     private class GameRenderThread extends Thread {
         GameController gameController;
         SurfaceHolder surfaceHolder;
@@ -120,7 +171,7 @@ public class GameController {
             long deltaTime = MaxFpsSpeed;
             long renderTime = 0;
 
-            while(!interrupted()) {
+            while(!isInterrupted()) {
                 if (deltaTime >= MaxFpsSpeed) {
                     renderTime = System.currentTimeMillis();
                     gameController.update(deltaTime);
@@ -172,13 +223,20 @@ public class GameController {
                     ballVect.setY(- ballVect.getY() * CollisionForce);
                 }
             } else if (object.HasColided(gameBall.getX(), gameBall.getY(), gameBall.getRadius())) {
-                // loose
-                gameRenderThread.interrupt();
+                gameStatus = GameStatus.LOST;
+                finishGame();
             }
+        }
+
+        if (gamePolygon.getEndHole().HasColided(gameBall.getX(), gameBall.getY(), gameBall.getRadius())) {
+            gameStatus = GameStatus.WON;
+            finishGame();
         }
 
         hud.updateTime(deltaTime);
         hud.setFps(1000 / deltaTime);
+
+        totalGameTime += deltaTime;
     }
 
     private void draw(Canvas canvas) {

@@ -20,8 +20,7 @@ public class Hud implements GameObject {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawText(
-                "Time: " + String.valueOf(time / 1000)
-                + "." + String.valueOf((time % 1000) / 10),
+                "Time: " + produceTimeString(time),
                 20.0f,
                 44.0f,
                 defaultPaint
@@ -46,5 +45,10 @@ public class Hud implements GameObject {
 
     public void setFps(long fps) {
         this.fps = fps;
+    }
+
+    public static String produceTimeString(long time) {
+        return String.valueOf(time / 1000)
+                + "." + String.valueOf((time % 1000) / 10);
     }
 }

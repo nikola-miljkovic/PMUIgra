@@ -18,6 +18,7 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
 
     GameController gameController = GameController.getInstance();
     SensorManager sensorManager;
+    SensorEventHandler sensorEventHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,21 +27,49 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
 
         String polygonName = getIntent().getStringExtra("NAME");
         if (polygonName != null && !polygonName.isEmpty()) {
-            boolean status = gameController.load(polygonName, getApplicationContext());
+            boolean status = gameController.load(polygonName, this);
         } else {
             Toast.makeText(this, R.string.toast_new_polygon, Toast.LENGTH_SHORT).show();
         }
 
+        sensorEventHandler = new SensorEventHandler();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(
-                new SensorEventHandler(),
+                sensorEventHandler,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME
         );
 
         SurfaceView surfaceView = (SurfaceView)findViewById(R.id.game_surface);
         surfaceView.getHolder().addCallback(this);
-        //surfaceView.setOnTouchListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        gameController.finishGame();
+
+        super.onBackPressed();
+    }
+
+    public void onGameFinished(int gameStatus, String totalGameTime) throws InterruptedException {
+        switch (gameStatus) {
+            case GameController.GameStatus.IN_PROGRESS:
+                // just exit
+                Toast.makeText(this, R.string.toast_game_exit, Toast.LENGTH_SHORT).show();
+                break;
+            case GameController.GameStatus.LOST:
+                Toast.makeText(this, R.string.toast_game_lost, Toast.LENGTH_SHORT).show();
+                Thread.sleep(1000);
+                finish();
+                break;
+            case GameController.GameStatus.WON:
+                Toast.makeText(this, getString(R.string.toast_game_won, totalGameTime), Toast.LENGTH_SHORT).show();
+                // TODO: dialog and save
+                finish();
+                break;
+        }
+
+        sensorManager.unregisterListener(sensorEventHandler);
     }
 
     private class SensorEventHandler implements SensorEventListener {

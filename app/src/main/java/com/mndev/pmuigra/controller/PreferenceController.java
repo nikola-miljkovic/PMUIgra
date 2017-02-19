@@ -43,6 +43,7 @@ public class PreferenceController {
         editor.apply();
     }
 
+    // TODO: restoreDefaults
     public void restoreDefaults(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file), Context.MODE_PRIVATE);

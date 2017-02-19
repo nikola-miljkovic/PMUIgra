@@ -19,6 +19,10 @@
     <string name="toast_polygon_creation_error">Error while creating polygon \"%1$s\".</string>
     <string name="toast_polygon_cancel">Canceled polygon creation.</string>
 
+    <string name="toast_game_exit">You have exited game</string>
+    <string name="toast_game_lost">You loose</string>
+    <string name="toast_game_won">You won with time  \"%1$s\".</string>
+
     <string name="dialog_new_polygon">Give name to new polygon.</string>
 
     <string name="delete">Delete</string>
@@ -33,4 +37,5 @@
     <string name="preference_file">com.mndev.pmuigra.PREF_FILE</string>
     <string name="save_prefs">Save Preferences</string>
     <string name="restore_default_pref">Restore defaults</string>
+
 </resources>
