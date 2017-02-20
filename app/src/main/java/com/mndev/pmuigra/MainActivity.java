@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openStatisticsActivity() {
+        Intent intent = new Intent(this, PolygonListActivity.class);
+        startActivity(intent);
     }
 
     private void openSettingsActivity() {

@@ -13,19 +13,24 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.mndev.pmuigra.controller.GameController;
+import com.mndev.pmuigra.controller.StatisticsController;
 
-public class PolygonGameActivity extends Activity implements SurfaceHolder.Callback {
+public class PolygonGameActivity extends Activity implements SurfaceHolder.Callback, SaveScoreDialog.Listener {
 
     GameController gameController = GameController.getInstance();
+    StatisticsController statisticsController = StatisticsController.getInstance();
+
     SensorManager sensorManager;
     SensorEventHandler sensorEventHandler;
+
+    String polygonName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_polygon_game);
 
-        String polygonName = getIntent().getStringExtra("NAME");
+        polygonName = getIntent().getStringExtra("NAME");
         if (polygonName != null && !polygonName.isEmpty()) {
             boolean status = gameController.load(polygonName, this);
         } else {
@@ -64,12 +69,33 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
                 break;
             case GameController.GameStatus.WON:
                 Toast.makeText(this, getString(R.string.toast_game_won, totalGameTime), Toast.LENGTH_SHORT).show();
-                // TODO: dialog and save
-                finish();
+                Bundle arguments = new Bundle();
+                arguments.putString(SaveScoreDialog.ARGUMENT_TOTAL_GAME_TIME, totalGameTime);
+
+                SaveScoreDialog saveScoreDialog = new SaveScoreDialog();
+                saveScoreDialog.setListener(this);
+                saveScoreDialog.setArguments(arguments);
+                saveScoreDialog.show(getFragmentManager(), "Save Polygon");
+
                 break;
         }
 
         sensorManager.unregisterListener(sensorEventHandler);
+    }
+
+    @Override
+    public void save(String name, String totalGameTime) {
+        statisticsController.loadContext(getApplicationContext());
+        try {
+            statisticsController.writeStatistic(polygonName, "Nikolica", Float.parseFloat(totalGameTime));
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    @Override
+    public void cancel() {
+        finish();
     }
 
     private class SensorEventHandler implements SensorEventListener {

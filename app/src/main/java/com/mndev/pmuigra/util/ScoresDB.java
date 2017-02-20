@@ -23,7 +23,7 @@ public class ScoresDB extends SQLiteOpenHelper {
             + " INTEGER PRIMARY KEY,"
             + ScoresTableEntry.COLUMN_NAME_USERNAME + " TEXT, "
             + ScoresTableEntry.COLUMN_NAME_POLYGON_NAME + " TEXT, "
-            + ScoresTableEntry.COLUMN_NAME_SCORE + " TEXT);";
+            + ScoresTableEntry.COLUMN_NAME_SCORE + " REAL);";
 
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "
             + ScoresTableEntry.TABLE_NAME;

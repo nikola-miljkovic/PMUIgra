@@ -49,7 +49,12 @@ public class PreferenceController {
                 context.getString(R.string.preference_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        editor.clear();
+        editor.remove(context.getString(R.string.pref_max_fps));
+        editor.remove(context.getString(R.string.pref_cof));
+        editor.remove(context.getString(R.string.pref_collision_force));
+        editor.remove(context.getString(R.string.pref_boost_x));
+        editor.remove(context.getString(R.string.pref_boost_y));
+
         editor.apply();
     }
 

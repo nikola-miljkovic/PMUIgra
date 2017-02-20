@@ -188,6 +188,6 @@ public class NewPolygonActivity extends Activity implements SurfaceHolder.Callba
 
     @Override
     public void cancel() {
-
+        // Nothing here, no finish
     }
 }

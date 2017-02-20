@@ -37,5 +37,8 @@
     <string name="preference_file">com.mndev.pmuigra.PREF_FILE</string>
     <string name="save_prefs">Save Preferences</string>
     <string name="restore_default_pref">Restore defaults</string>
+    <string name="title_polygon_list">Polygons</string>
+    <string name="title_polygon_detail">Polygon statistics</string>
+    <string name="dialog_save_score">Enter username to save score</string>
 
 </resources>
