@@ -125,7 +125,7 @@ public class GameController {
     public void finishGame() {
         gameRenderThread.interrupt();
 
-        if (gameActivity != null) {
+        if (gameActivity != null && ourInstance != null) {
             gameActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

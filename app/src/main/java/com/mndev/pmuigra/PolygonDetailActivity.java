@@ -2,6 +2,7 @@ package com.mndev.pmuigra;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.mndev.pmuigra.controller.StatisticsController;
 import com.mndev.pmuigra.model.StatisticsEntry;
@@ -25,34 +31,20 @@ import java.util.List;
  */
 public class PolygonDetailActivity extends AppCompatActivity {
 
-    String polygonName;
-    List<StatisticsEntry> statisticsEntries;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_polygon_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        polygonName = getIntent().getStringExtra(PolygonDetailFragment.ARG_ITEM_ID);
-
-        try {
-            statisticsEntries = StatisticsController.getInstance()
-                    .loadContext(getApplicationContext())
-                    .getStatisticsForPolygon(polygonName);
-        } catch (Exception exc) {
-            exc.printStackTrace();
-
-            statisticsEntries = new ArrayList<>();
-        }
+        String polygonName = getIntent().getStringExtra(PolygonDetailFragment.ARG_ITEM_ID);
+        actionBar.setTitle(polygonName + " statistics");
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -74,24 +66,5 @@ public class PolygonDetailActivity extends AppCompatActivity {
                     .add(R.id.polygon_detail_container, fragment)
                     .commit();
         }
-
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            NavUtils.navigateUpTo(this, new Intent(this, PolygonListActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

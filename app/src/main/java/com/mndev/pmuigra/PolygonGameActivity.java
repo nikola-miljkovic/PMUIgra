@@ -69,9 +69,9 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
                 break;
             case GameController.GameStatus.WON:
                 Toast.makeText(this, getString(R.string.toast_game_won, totalGameTime), Toast.LENGTH_SHORT).show();
+
                 Bundle arguments = new Bundle();
                 arguments.putString(SaveScoreDialog.ARGUMENT_TOTAL_GAME_TIME, totalGameTime);
-
                 SaveScoreDialog saveScoreDialog = new SaveScoreDialog();
                 saveScoreDialog.setListener(this);
                 saveScoreDialog.setArguments(arguments);
@@ -91,10 +91,13 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
         } catch (Exception exc) {
             exc.printStackTrace();
         }
+
+        finish();
     }
 
     @Override
     public void cancel() {
+        Toast.makeText(this, R.string.toast_game_no_save, Toast.LENGTH_SHORT).show();
         finish();
     }
 

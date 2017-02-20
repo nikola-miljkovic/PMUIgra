@@ -61,7 +61,7 @@ public class StatisticsController {
                 whereValues,
                 null,
                 null,
-                ScoresDB.ScoresTableEntry.COLUMN_NAME_SCORE + " DESC"
+                ScoresDB.ScoresTableEntry.COLUMN_NAME_SCORE + " ASC"
         );
 
         List<StatisticsEntry> entries = new ArrayList<>();
