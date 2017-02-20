@@ -113,9 +113,6 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
                 accelerationValues[i] = alpha * accelerationValues[i] + (1 - alpha) * sensorEvent.values[i] ; //- gravity[i];
             }
 
-            Log.d("ACCELERATION", " X: " + String.valueOf(accelerationValues[0])
-                    + " Y: " + String.valueOf(accelerationValues[1]));
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

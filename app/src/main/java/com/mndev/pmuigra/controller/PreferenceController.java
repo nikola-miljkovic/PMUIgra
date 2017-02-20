@@ -20,12 +20,12 @@ public class PreferenceController {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file), Context.MODE_PRIVATE);
 
-        mMaxFPS = sharedPref.getInt(context.getString(R.string.pref_max_fps), mMaxFPS);
-        mCoefficientOfFriction = sharedPref.getFloat(context.getString(R.string.pref_cof), mCoefficientOfFriction);
-        mCollisionForce = sharedPref.getFloat(context.getString(R.string.pref_collision_force), mCollisionForce);
-        mGameSpeed = sharedPref.getFloat(context.getString(R.string.pref_game_speed), mGameSpeed);
-        mBoostX = sharedPref.getFloat(context.getString(R.string.pref_boost_x), mBoostX);
-        mBoostY = sharedPref.getFloat(context.getString(R.string.pref_boost_y), mBoostY);
+        mMaxFPS = sharedPref.getInt(context.getString(R.string.pref_max_fps), mMaxFPSDef);
+        mCoefficientOfFriction = sharedPref.getFloat(context.getString(R.string.pref_cof), mCoefficientOfFrictionDef);
+        mCollisionForce = sharedPref.getFloat(context.getString(R.string.pref_collision_force), mCollisionForceDef);
+        mGameSpeed = sharedPref.getFloat(context.getString(R.string.pref_game_speed), mGameSpeedDef);
+        mBoostX = sharedPref.getFloat(context.getString(R.string.pref_boost_x), mBoostXDef);
+        mBoostY = sharedPref.getFloat(context.getString(R.string.pref_boost_y), mBoostYDef);
     }
 
     public void store(Context context) {
@@ -49,21 +49,29 @@ public class PreferenceController {
                 context.getString(R.string.preference_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        editor.remove(context.getString(R.string.pref_max_fps));
-        editor.remove(context.getString(R.string.pref_cof));
-        editor.remove(context.getString(R.string.pref_collision_force));
-        editor.remove(context.getString(R.string.pref_boost_x));
-        editor.remove(context.getString(R.string.pref_boost_y));
+        editor.putInt(context.getString(R.string.pref_max_fps), mMaxFPSDef);
+        editor.putFloat(context.getString(R.string.pref_cof), mCoefficientOfFrictionDef);
+        editor.putFloat(context.getString(R.string.pref_collision_force), mCollisionForceDef);
+        editor.putFloat(context.getString(R.string.pref_game_speed), mGameSpeedDef);
+        editor.putFloat(context.getString(R.string.pref_boost_x), mBoostXDef);
+        editor.putFloat(context.getString(R.string.pref_boost_y), mBoostYDef);
 
         editor.apply();
     }
 
-    int mMaxFPS = 60;
-    float mCoefficientOfFriction = 0.25f;
-    float mCollisionForce = 0.85f;
-    float mGameSpeed = 0.60f;
-    float mBoostX = 1.6f;
-    float mBoostY = 1.1f;
+    private static int mMaxFPSDef = 60;
+    private static float mCoefficientOfFrictionDef = 0.25f;
+    private static float mCollisionForceDef = 0.85f;
+    private static float mGameSpeedDef = 0.60f;
+    private static float mBoostXDef = 1.6f;
+    private static float mBoostYDef = 1.1f;
+
+    int mMaxFPS;
+    float mCoefficientOfFriction;
+    float mCollisionForce;
+    float mGameSpeed;
+    float mBoostX;
+    float mBoostY;
 
     public int getRenderSpeed() {
         return 1000 / mMaxFPS;

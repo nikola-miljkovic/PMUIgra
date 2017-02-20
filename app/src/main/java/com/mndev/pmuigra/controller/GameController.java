@@ -186,6 +186,8 @@ public class GameController {
         }
     }
 
+    private boolean bounced = false;
+
     private void update(long deltaTime) {
         // apply friction
         float speed = deltaTime / 1000.0f;
@@ -195,37 +197,45 @@ public class GameController {
         gameBall.setX(gameBall.getX() + ballVect.getX() * speed);
         gameBall.setY(gameBall.getY() + ballVect.getY() * speed);
 
-        if (gameBall.getX() - gameBall.getRadius() <= 0.0f
-                || gameBall.getX() + gameBall.getRadius() >= width) {
-            ballVect.setX(- ballVect.getX() * CollisionForce);
-        }
-
-        if (gameBall.getY() - gameBall.getRadius() <= 0.0f
-                || gameBall.getY() + gameBall.getRadius() >= height) {
-            ballVect.setY(- ballVect.getY() * CollisionForce);
-        }
-
-        for (GameObject object : gamePolygon.getGameObjects()) {
-            if (object instanceof LineComponent) {
-                // bounce
-                LineComponent lineComponent = (LineComponent)object;
-                if (gameBall.getX() - gameBall.getRadius() < lineComponent.getX2()
-                        && gameBall.getX() + gameBall.getRadius() > lineComponent.getX1()
-                        && gameBall.getY() > lineComponent.getY1()
-                        && gameBall.getY() < lineComponent.getY2())  {
-                    ballVect.setX(- ballVect.getX() * CollisionForce);
-                }
-
-                if (gameBall.getX() < lineComponent.getX2()
-                        && gameBall.getX() > lineComponent.getX1()
-                        && gameBall.getY() + gameBall.getRadius()  >= lineComponent.getY1()
-                        && gameBall.getY() - gameBall.getRadius()  <= lineComponent.getY2())  {
-                    ballVect.setY(- ballVect.getY() * CollisionForce);
-                }
-            } else if (object.HasColided(gameBall.getX(), gameBall.getY(), gameBall.getRadius())) {
-                gameStatus = GameStatus.LOST;
-                finishGame();
+        if (!bounced) {
+            if (gameBall.getX() - gameBall.getRadius() <= 0.0f
+                    || gameBall.getX() + gameBall.getRadius() >= width) {
+                ballVect.setX(- ballVect.getX() * CollisionForce);
+                bounced = true;
             }
+
+            if (gameBall.getY() - gameBall.getRadius() <= 0.0f
+                    || gameBall.getY() + gameBall.getRadius() >= height) {
+                ballVect.setY(- ballVect.getY() * CollisionForce);
+                bounced = true;
+            }
+
+            for (GameObject object : gamePolygon.getGameObjects()) {
+                if (object instanceof LineComponent) {
+                    // bounce
+                    LineComponent lineComponent = (LineComponent)object;
+                    if ((gameBall.getX() - gameBall.getRadius()) <= lineComponent.getX2()
+                            && (gameBall.getX() + gameBall.getRadius()) >= lineComponent.getX1()
+                            && gameBall.getY() > lineComponent.getY1()
+                            && gameBall.getY() < lineComponent.getY2())  {
+                        ballVect.setX(- ballVect.getX() * CollisionForce);
+                        bounced = true;
+                    }
+
+                    if (gameBall.getX() < lineComponent.getX2()
+                            && gameBall.getX() > lineComponent.getX1()
+                            && (gameBall.getY() + gameBall.getRadius())  >= lineComponent.getY1()
+                            && (gameBall.getY() - gameBall.getRadius())  <= lineComponent.getY2())  {
+                        ballVect.setY(- ballVect.getY() * CollisionForce);
+                        bounced = true;
+                    }
+                } else if (object.HasColided(gameBall.getX(), gameBall.getY(), gameBall.getRadius())) {
+                    gameStatus = GameStatus.LOST;
+                    finishGame();
+                }
+            }
+        } else {
+            bounced = false;
         }
 
         if (gamePolygon.getEndHole().HasColided(gameBall.getX(), gameBall.getY(), gameBall.getRadius())) {
