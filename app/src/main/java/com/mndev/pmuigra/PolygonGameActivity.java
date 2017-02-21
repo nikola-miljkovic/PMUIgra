@@ -87,7 +87,7 @@ public class PolygonGameActivity extends Activity implements SurfaceHolder.Callb
     public void save(String name, String totalGameTime) {
         statisticsController.loadContext(getApplicationContext());
         try {
-            statisticsController.writeStatistic(polygonName, "Nikolica", Float.parseFloat(totalGameTime));
+            statisticsController.writeStatistic(polygonName, name, Float.parseFloat(totalGameTime));
         } catch (Exception exc) {
             exc.printStackTrace();
         }
